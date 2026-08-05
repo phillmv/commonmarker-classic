@@ -1,3 +1,5 @@
+# [v2.9.0] - 05-08-2026
+**Full Changelog**: https://github.com/phillmv/commonmarker-classic/compare/v0.22.0...v2.9.0
 # [v2.9.0] - 13-07-2026
 ## What's Changed
 * Fix i686 with u32 parsing hack by @kivikakk in https://github.com/gjtorikian/commonmarker/pull/471
