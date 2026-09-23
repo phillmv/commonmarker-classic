@@ -1,0 +1,21 @@
+[package]
+name = "comrak_ffi"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+publish = false
+description = "A small C ABI over comrak, for commonmarker's Ruby extension"
+license = "MIT"
+
+[lib]
+crate-type = ["staticlib"]
+path = "src/lib.rs"
+
+[dependencies]
+comrak = { path = "../comrak", default-features = false }
+
+[profile.release]
+lto = true
+codegen-units = 1
+# Panics are caught at the FFI boundary with catch_unwind, which needs unwinding.
+panic = "unwind"

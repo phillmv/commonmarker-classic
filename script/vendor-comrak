@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Vendor comrak's library sources into ext/commonmarker/comrak.
+#
+# Usage: script/vendor-comrak PATH_TO_COMRAK_CHECKOUT
+#
+# Only what is needed to build the comrak library is copied: the manifest,
+# build script, licence, and library sources. The test suite, benches,
+# examples, and project metadata are left out. The upstream commit is recorded
+# in ext/commonmarker/comrak/VENDORED.
+
+set -euo pipefail
+
+src="${1:?usage: script/vendor-comrak PATH_TO_COMRAK_CHECKOUT}"
+root="$(cd "$(dirname "$0")/.." && pwd)"
+dest="$root/ext/commonmarker/comrak"
+
+if [ -n "$(git -C "$src" status --porcelain)" ]; then
+  echo "error: $src has uncommitted changes; commit or stash them first" >&2
+  exit 1
+fi
+
+commit="$(git -C "$src" rev-parse HEAD)"
+version="$(sed -n 's/^version = "\(.*\)"$/\1/p' "$src/Cargo.toml" | head -1)"
+
+rm -rf "$dest"
+mkdir -p "$dest"
+
+git -C "$src" ls-files -z -- \
+  Cargo.toml build.rs COPYING src \
+  ':!:src/tests' ':!:src/tests.rs' |
+  (cd "$src" && xargs -0 cp --parents -t "$dest")
+
+cat > "$dest/VENDORED" <<EOF
+Vendored by script/vendor-comrak; do not edit by hand.
+upstream: https://github.com/kivikakk/comrak
+version: $version
+commit: $commit
+EOF
+
+echo "vendored comrak $version ($commit) into ${dest#"$root"/}"

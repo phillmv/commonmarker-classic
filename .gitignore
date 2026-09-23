@@ -43,3 +43,6 @@ test/progit
 test/benchinput.md
 
 .vscode
+
+# cargo output from building/testing comrak_ffi in place
+/ext/commonmarker/comrak_ffi/target/

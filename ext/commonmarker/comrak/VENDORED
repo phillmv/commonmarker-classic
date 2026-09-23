@@ -1,0 +1,4 @@
+Vendored by script/vendor-comrak; do not edit by hand.
+upstream: https://github.com/kivikakk/comrak
+version: 0.55.0
+commit: a28e394fc26e8be2d36b8fc630f6329da7a13cc1
