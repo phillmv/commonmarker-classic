@@ -7,15 +7,18 @@ require "commonmarker/version"
 Gem::Specification.new do |s|
   s.name = "commonmarker"
   s.version = CommonMarker::VERSION
-  s.summary = "CommonMark parser and renderer. Written in C, wrapped in Ruby."
-  s.description = "A fast, safe, extensible parser for CommonMark. This wraps the official libcmark library."
+  s.summary = "CommonMark parser and renderer. Written in Rust, wrapped in Ruby."
+  s.description = "A fast, safe, extensible parser for CommonMark. This wraps comrak, a Rust port of GitHub's cmark-gfm."
   s.authors = ["Garen Torikian", "Ashe Connor"]
   s.homepage = "https://github.com/gjtorikian/commonmarker"
   s.license = "MIT"
 
   s.files         = ["LICENSE.txt", "README.md", "Rakefile", "commonmarker.gemspec", "bin/commonmarker"]
   s.files        += Dir.glob("lib/**/*.rb")
-  s.files        += Dir.glob("ext/commonmarker/*.*")
+  s.files += ["ext/commonmarker/extconf.rb", "ext/commonmarker/commonmarker.c", "ext/commonmarker/commonmarker.h"]
+  s.files += Dir.glob("ext/commonmarker/comrak_ffi/{Cargo.toml,Cargo.lock,include/**/*,src/**/*}")
+  s.files += Dir.glob("ext/commonmarker/comrak/**/*")
+  s.files.reject! { |f| File.directory?(f) }
   s.extensions    = ["ext/commonmarker/extconf.rb"]
 
   s.executables = ["commonmarker"]

@@ -44,5 +44,24 @@ class TestNode < Minitest::Test
     # If the hrule node was erroneously freed, this would result in a double
     # free.
   end
+
+  def test_cached_nodes_survive_compaction
+    skip("GC compaction is unavailable") unless GC.respond_to?(:verify_compaction_references)
+
+    doc = CommonMarker.render_doc("Hi *there*")
+    nodes = children_held_only_by_an_array(doc)
+    GC.verify_compaction_references(expand_heap: true, toward: :empty)
+
+    # If a moved node's cache entry weren't updated, these would be stale.
+    assert_same(nodes[0], doc.first_child)
+    assert_same(nodes[1], doc.first_child.first_child)
+  end
+
+  private
+
+  # Nothing on the stack refers to these nodes, so compaction may move them.
+  def children_held_only_by_an_array(doc)
+    [doc.first_child, doc.first_child.first_child]
+  end
 end
 # rubocop:enable Lint/UselessAssignment

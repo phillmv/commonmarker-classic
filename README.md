@@ -7,6 +7,9 @@ GitHub's fork of the reference parser for CommonMark. It passes all of the C tes
 
 For more information on available extensions, see [the documentation below](#extensions).
 
+> [!NOTE]
+> On this branch, the extension talks to [comrak](https://github.com/kivikakk/comrak), a Rust port of cmark-gfm, over a small C ABI instead of linking libcmark-gfm. Building it requires a Rust toolchain (`cargo`). The Ruby API is unchanged, but a few features are not implemented and some output differs; see [COMRAK.md](COMRAK.md).
+
 ## Installation
 
 Add this line to your application's Gemfile:
